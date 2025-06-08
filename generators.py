@@ -1,6 +1,6 @@
 from typing import Iterator
 
-def lcg(m: int, a: int, c: int, seed: int) -> Iterator[int]:
+def lcg(seed: int, m: int=2**32, a: int=1664525, c: int=1013904223) -> Iterator[int]:
     """
     This generator implements the Linear Congruential Generator algorithm
     :param m: the modulus, a positive integer constant
@@ -12,7 +12,7 @@ def lcg(m: int, a: int, c: int, seed: int) -> Iterator[int]:
     x = seed
     while True:
         x = (a * x + c) % m
-        yield x
+        yield x/m
 
 def xorshift_64(seed: int) -> Iterator[int]:
     """
@@ -26,7 +26,7 @@ def xorshift_64(seed: int) -> Iterator[int]:
         x ^= (x >> 7) & 0xFFFFFFFFFFFFFFFF
         x ^= (x << 17) & 0xFFFFFFFFFFFFFFFF
         x &= 0xFFFFFFFFFFFFFFFF
-        yield x
+        yield x/0xFFFFFFFFFFFFFFFF
 
 
 def rotl(x: int, k: int) -> int:
@@ -54,4 +54,4 @@ def xoshiro_64(seed: list[int]) -> Iterator[int]:
         s[2] ^= t
         s[3] = rotl(s[3], 45)
 
-        yield result
+        yield result/0xFFFFFFFFFFFFFFFF
